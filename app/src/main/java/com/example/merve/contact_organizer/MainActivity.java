@@ -1,5 +1,6 @@
 package com.example.merve.contact_organizer;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -20,6 +22,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     EditText nameTxt, phoneTxt, emailTxt, addressTxt;
+
+    ImageView contactImgView;
 
     List<Contact> Contacts = new ArrayList<Contact>();
 
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         addressTxt = (EditText) findViewById(R.id.txtAddress);
 
         contactListView = (ListView) findViewById(R.id.listView);
+
+        contactImgView = (ImageView) findViewById(R.id.imgViewContact);
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
@@ -80,6 +86,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        contactImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select contact image"), 1);
+            }
+        });
+    }
+
+    public void OnActivityResult(int reqCode, int resCode, Intent data) {
+
+        if(resCode == RESULT_OK){
+            if (reqCode == 1)
+                contactImgView.setImageURI(data.getData());
+        }
     }
 
     private void populateList(){
